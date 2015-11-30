@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LivoQ Loading bar</title>
+
+    <style>
+
+        body{
+            background-color: #fafaf9;
+            font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+
+        }
+
+        .progress-bar {
+            background-color: #888a85;
+            height: 25px;
+            padding: 5px;
+            width: 400px;
+        }
+
+        .progress-bar span {
+            display: inline-block;
+            height: 100%;
+            -webkit-transition: width .4s ease-in-out;
+            -moz-transition: width .4s ease-in-out;
+            -ms-transition: width .4s ease-in-out;
+            -o-transition: width .4s ease-in-out;
+            transition: width .4s ease-in-out;
+        }
+
+        .blue span {
+            background-color: #73d216;
+        }
+
+        .stripes span {
+            -webkit-background-size: 50px 50px;
+            -moz-background-size: 50 50px;
+            background-size: 50px 50px;
+            background-image: -webkit-gradient(linear, left top, right bottom,
+            color-stop(.25, rgba(117, 80, 123, 0.9)), color-stop(.25, transparent),
+            color-stop(.5, transparent), color-stop(.5, rgba(117, 80, 123, 0.9)),
+            color-stop(.75, rgba(117, 80, 123, 0.9)), color-stop(.75, transparent),
+            to(transparent));
+
+            background-image: -webkit-linear-gradient(135deg, rgba(117, 80, 123, 0.9) 25%, transparent 25%,
+            transparent 50%, rgba(117, 80, 123, 0.9) 50%, rgba(117, 80, 123, 0.9) 75%,
+            transparent 75%, transparent);
+
+            background-image: -moz-linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+            transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+            transparent 75%, transparent);
+
+            background-image: -ms-linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+            transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+            transparent 75%, transparent);
+
+            background-image: -o-linear-gradient(135deg, rgba(255, 255, 255, .15) 25%, transparent 25%,
+            transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%,
+            transparent 75%, transparent);
+
+            background-image: linear-gradient(135deg, rgba(117, 80, 123, 0.9) 25%, transparent 25%,
+            transparent 50%, rgba(117, 80, 123, 0.9) 50%, rgba(117, 80, 123, 0.9) 75%,
+            transparent 75%, transparent);
+
+
+        }
+
+        .animate_stripes span{
+            -webkit-animation: animate-stripes 3s linear infinite;
+            -moz-animation: animate-stripes 3s linear infinite;
+        }
+
+        @-webkit-keyframes animate-stripes {
+            0% {background-position: 0 0;} 100% {background-position: 60px 0;}
+        }
+
+        @-moz-keyframes animate-stripes {
+            0% {background-position: 0 0;} 100% {background-position: 60px 0;}
+        }
+
+        .color_list_element {
+            list-style:none;
+            padding:0;
+            margin: 0 0 10px 0;
+            font-size: 2em;
+        }
+        .color_list_element:before {
+            content: "";
+            width:40px;
+            height:40px;
+            display: block;
+            float: left;
+            margin-right: 5px;
+        }
+        .color_list_element_purple:before{
+            background: #75507b;
+
+
+        }
+        .color_list_element_green:before{
+            background: #73d216;
+
+        }
+        .color_list_element_grey:before{
+            background: #888a85;
+        }
+
+
+
+
+
+
+
+
+        .loading_bar {
+            text-align: center;
+        }
+        #loading_bars_text{
+            font-size: 2em;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+        .loading_bar div{
+            height:100px;
+            width:40px;
+            display:inline-block;
+            margin: 5px;
+            -webkit-animation:bars_loader 1.3s linear infinite;
+            -moz-animation:bars_loader 1.3s linear infinite;
+            animation:bars_loader 1.3s linear infinite;
+            -webkit-transform:scale(0.91);
+            -moz-transform:scale(0.91);
+            transform:scale(0.91);
+        }
+
+        .purplebar{
+            background-color: #75507b;
+            border:5px solid #5c3566;
+        }
+        .greenbar{
+            background-color: #73d216;
+            border:5px solid #4e9a06;
+        }
+
+        .loading_bar div:nth-child(2){
+            -webkit-animation-delay:0.39s;
+            -moz-animation-delay:0.39s;
+            animation-delay:0.39s;
+        }
+        .loading_bar div:nth-child(3){
+            -webkit-animation-delay:0.52s;
+            -moz-animation-delay:0.52s;
+            animation-delay:0.52s;
+        }
+        .loading_bar div:nth-child(4){
+            -webkit-animation-delay:0.65s;
+            -moz-animation-delay:0.65s;
+            animation-delay:0.65s;
+        }
+
+        .loading_bar div:nth-child(5){
+            -webkit-animation-delay:0.78s;
+            -moz-animation-delay:0.78s;
+            animation-delay:0.78s;
+        }
+        .loading_bar div:nth-child(6){
+            -webkit-animation-delay:0.91s;
+            -moz-animation-delay:0.91s;
+            animation-delay:0.91s;
+        }
+        .loading_bar div:nth-child(7){
+            -webkit-animation-delay:1.04s;
+            -moz-animation-delay:1.04s;
+            animation-delay:1.04s;
+        }
+
+        @-webkit-keyframes bars_loader{
+            0%{
+                -webkit-transform:scale(1.2);
+                opacity:1
+            }
+            100%{
+                -webkit-transform:scale(0.7);
+                opacity:0.1
+            }
+        }
+        @-moz-keyframes bars_loader{
+            0%{
+                -moz-transform:scale(1.2);
+                opacity:1
+            }
+            100%{
+                -moz-transform:scale(0.7);
+                opacity:0.1
+            }
+        }
+        @keyframes bars_loader{
+            0%{
+                transform:scale(1.2);
+                opacity:1
+            }
+            100%{
+                transform:scale(0.7);
+                opacity:0.1
+            }
+        }
+
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="loading_bar">
+    <p id="loading_bars_text">Loading...</p>
+    <div class="purplebar"></div>
+    <div class="greenbar"></div>
+    <div class="purplebar"></div>
+    <div class="greenbar"></div>
+    <div class="purplebar"></div>
+    <div class="greenbar"></div>
+</div>
+
+<div style="width: 550px; height: 100px">
+    <div style="float:left;margin-right: 10px">
+        <span style="font-size:2em;">43 %</span>
+    </div>
+    <div class="progress-bar blue stripes animate_stripes" style="float:left;">
+       <span style="width: 43%;"></span>
+    </div>
+
+
+</div>
+
+<div>
+    <ul>
+        <li class="color_list_element color_list_element_purple">Answer 1</li>
+        <li class="color_list_element color_list_element_green">Answer 1</li>
+        <li class="color_list_element color_list_element_grey">Don't know</li>
+    </ul>
+</div>
+<button onclick="updatePoints()">Height</button>
+<div id="container2"></div>
+
+<div id="container"></div>
+
+<script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.7.2.min.js"></script>
+<script defer="defer">
+    var stage2 = new Kinetic.Stage({
+        container: 'container2',
+        width: 578,
+        height: 400
+    });
+    var layer2 = new Kinetic.Layer();
+
+    function generatePoints(height,startx){
+        var points = {};
+
+        var height = height;
+        var width = 50;
+        var startx = startx;
+        var starty = 390;
+        var topheight =width/3;
+        var topwidth = width/3;
+
+        var bottomLeft ={x:startx,y:starty};
+        var bottomRight ={x:startx+width,y:starty};
+        var topLeft ={x:startx,y:starty-height};
+        var topRight ={x:startx+width,y:starty-height};
+
+        var topTopLeft = {x:startx+topwidth,y:starty-height-topheight};
+        var topTopRight = {x:startx+topwidth+width,y:starty-height-topheight};
+
+        var bottomRightRight ={x:startx+width+topwidth,y:starty-topwidth};
+        var topRightRight ={x:startx+width+topwidth,y:starty-topwidth-height};
+
+
+        points.front =[bottomLeft,bottomRight,topRight,topLeft];
+        points.side =[bottomRight,bottomRightRight,topRightRight,topRight];
+        points.top =[topLeft,topTopLeft,topTopRight,topRight];
+        points.text =topTopLeft;
+
+        return points;
+    }
+
+    function updatePoints(){
+        var greenPoints = generatePoints(Math.floor(Math.random() * 350),50);
+        var purplePoints = generatePoints(Math.floor(Math.random() * 350),200);
+
+        if(layer2.getChildren().length===0){
+            console.log("dupe");
+
+            var greenFront = new Kinetic.Polygon({
+                points: greenPoints.front,
+                fill: '#73d216',
+                id:'greenFront'
+            });
+            var greenTop = new Kinetic.Polygon({
+                points: greenPoints.top,
+                fill: '#8ae234',
+                id:'greenTop'
+
+            });
+            var greenSide = new Kinetic.Polygon({
+                points: greenPoints.side,
+                fill: '#4e9a06',
+                id:'greenSide'
+            });
+
+
+            var purpleFront = new Kinetic.Polygon({
+                points: purplePoints.front,
+                fill: '#75507b',
+                id:'purpleFront'
+            });
+
+            var purpleTop = new Kinetic.Polygon({
+                points: purplePoints.top,
+                fill: '#ad7fa8',
+                id:'purpleTop'
+
+            });
+
+            var purpleSide = new Kinetic.Polygon({
+                points: purplePoints.side,
+                fill: '#5c3566',
+                id:'purpleSide'
+            });
+
+            var greenText = new Kinetic.Text({
+                x: greenPoints.text.x,
+                y: greenPoints.text.y,
+                text: '100000',
+                fontSize: 18,
+                fontFamily: 'Calibri',
+                fill: 'black',
+                id:'greenText',
+                align: 'center'
+            });
+            greenText.setOffset([greenText.getTextWidth(), greenText.getFontSize()]);
+
+            var purpleText = new Kinetic.Text({
+                x: purplePoints.text.x,
+                y: purplePoints.text.y,
+                text: '100000',
+                fontSize: 18,
+                fontFamily: 'Calibri',
+                fill: 'black',
+                id:'purpleText',
+                align: 'center'
+            });
+            purpleText.setOffset([purpleText.getTextWidth(), purpleText.getFontSize()]);
+
+
+            // add the shape to the layer
+            layer2.add(greenFront);
+            layer2.add(greenTop);
+            layer2.add(greenSide);
+            layer2.add(greenText);
+
+            layer2.add(purpleFront);
+            layer2.add(purpleTop);
+            layer2.add(purpleSide);
+            layer2.add(purpleText);
+
+        }else{
+            var greenFront = stage2.find('#greenFront')[0];
+            greenFront.setPoints(greenPoints.front);
+            var greenSide = stage2.find('#greenSide')[0];
+            greenSide.setPoints(greenPoints.side);
+            var greenTop = stage2.find('#greenTop')[0];
+            greenTop.setPoints(greenPoints.top);
+            var greenText = stage2.find('#greenText')[0];
+            greenText.setPosition(greenPoints.text.x,greenPoints.text.y);
+
+            var purpleFront = stage2.find('#purpleFront')[0];
+            purpleFront.setPoints(purplePoints.front);
+            var purpleSide = stage2.find('#purpleSide')[0];
+            purpleSide.setPoints(purplePoints.side);
+            var purpleTop = stage2.find('#purpleTop')[0];
+            purpleTop.setPoints(purplePoints.top);
+            var purpleText = stage2.find('#purpleText')[0];
+            purpleText.setPosition(purplePoints.text.x,purplePoints.text.y);
+
+
+            layer2.draw();
+        }
+
+
+
+
+    }
+
+    function initBars(){
+        updatePoints();
+    }
+
+    //var allPoints = generatePoints(100);
+    initBars();
+
+    stage2.add(layer2);
+
+
+    var stage = new Kinetic.Stage({
+        container: 'container',
+        width: 578,
+        height: 400
+    });
+
+    var layer = new Kinetic.Layer();
+
+    function toRadians(degrees){
+        return (Math.PI/180) *degrees;
+    }
+
+    function drawWedges(){
+        var green = Math.floor(Math.random() * 500);
+        var purple = Math.floor(Math.random() * 500);
+        var grey = Math.floor(Math.random() * 50);
+        var total = green+ purple+ grey;
+
+
+        var degreeGreen = (green / total) *360
+        var degreePurple = (purple / total) *360
+        var degreeGrey = (grey / total) *360
+
+        var radius = 100;
+        var textOffset = 35;
+        var fontSize = 18;
+
+        var wedge1 = new Kinetic.Wedge({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            id: 'greenWedge',
+            radius: radius,
+            angleDeg: degreeGreen,
+            fill: '#73d216',
+            rotationDeg: 0
+        });
+        var wedge12 = new Kinetic.Wedge({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            radius: radius+10,
+            angleDeg: degreeGreen,
+            fill: '#4e9a06',
+            rotationDeg: 0
+        });
+        var wedge13 = new Kinetic.Wedge({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            radius: 30,
+            angleDeg: degreeGreen,
+            fill: '#8ae234',
+            rotationDeg: 0
+        });
+
+        var wedge2 = new Kinetic.Wedge({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            radius: radius,
+            angleDeg: degreePurple,
+            fill: '#75507b',
+            rotationDeg: degreeGreen
+        });
+        var wedge22 = new Kinetic.Wedge({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            radius: radius+10,
+            angleDeg: degreePurple,
+            fill: '#5c3566',
+            rotationDeg: degreeGreen
+        });
+        var wedge23 = new Kinetic.Wedge({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            radius: 30,
+            angleDeg: degreePurple,
+            fill: '#ad7fa8',
+            rotationDeg: degreeGreen
+        });
+
+        var wedge3 = new Kinetic.Wedge({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            radius: radius,
+            angleDeg: degreeGrey,
+            fill: '#888a85',
+            rotationDeg: (degreeGreen+degreePurple)
+        });
+        var wedge32 = new Kinetic.Wedge({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            radius: radius+10,
+            angleDeg: degreeGrey,
+            fill: '#555753',
+            rotationDeg: (degreeGreen+degreePurple)
+        });
+        var wedge33 = new Kinetic.Wedge({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            radius: 30,
+            angleDeg: degreeGrey,
+            fill: '#babdb6',
+            rotationDeg: (degreeGreen+degreePurple)
+        });
+
+        wedge1.on('mouseover', function() {
+            wedge1.setRadius(110);
+            wedge12.setRadius(120);
+            layer.draw();
+        });
+        wedge1.on('mouseout', function() {
+            wedge1.setRadius(100);
+            wedge12.setRadius(110);
+            layer.draw();
+        });
+
+        wedge2.on('mouseover', function() {
+            wedge2.setRadius(110);
+            wedge22.setRadius(120);
+            layer.draw();
+        });
+        wedge2.on('mouseout', function() {
+            wedge2.setRadius(100);
+            wedge22.setRadius(110);
+            layer.draw();
+        });
+
+        wedge3.on('mouseover', function() {
+            wedge3.setRadius(110);
+            wedge32.setRadius(120);
+            layer.draw();
+        });
+        wedge3.on('mouseout', function() {
+            wedge3.setRadius(100);
+            wedge32.setRadius(110);
+            layer.draw();
+        });
+
+        var circle = new Kinetic.Circle({
+            x: stage.getWidth() / 2,
+            y: stage.getHeight() / 2,
+            radius: 20,
+            fill: 'white'
+        });
+
+
+        var simpleText = new Kinetic.Text({
+            x: (stage.getWidth() / 2) +((radius+textOffset) * Math.cos(toRadians(degreeGreen/2))),
+            y: (stage.getHeight() / 2) +((radius+textOffset) * Math.sin(toRadians(degreeGreen/2))),
+            text: green,
+            fontSize: fontSize,
+            fontFamily: 'Calibri',
+            fill: 'black'
+        });
+        simpleText.setOffset({
+            x: simpleText.getWidth() / 2,
+            y:simpleText.getHeight() / 2
+        });
+
+        var simpleText2 = new Kinetic.Text({
+            x: (stage.getWidth() / 2) +((radius+textOffset) * Math.cos(toRadians((degreeGreen +(degreePurple/2))))),
+            y: (stage.getHeight() / 2) +((radius+textOffset) * Math.sin(toRadians((degreeGreen +(degreePurple/2))))),
+            text: purple,
+            fontSize: fontSize,
+            align: 'center',
+            fontFamily: 'Calibri',
+            fill: 'black'
+        });
+        simpleText2.setOffset({
+            x: simpleText2.getWidth() / 2,
+            y: simpleText2.getHeight() / 2
+        });
+
+        var simpleText3 = new Kinetic.Text({
+            x: (stage.getWidth() / 2) +((radius+textOffset) * Math.cos(toRadians((degreeGreen +degreePurple+(degreeGrey/2))))),
+            y: (stage.getHeight() / 2) +((radius+textOffset) * Math.sin(toRadians((degreeGreen +degreePurple+(degreeGrey/2))))),
+            text: grey,
+            fontSize: fontSize,
+            align: 'center',
+            fontFamily: 'Calibri',
+            fill: 'black'
+        });
+        simpleText3.setOffset({
+            x:simpleText3.getWidth() / 2,
+            y:simpleText3.getHeight() / 2
+        });
+
+
+
+        // add the shape to the layer
+        layer.add(wedge12);
+        layer.add(wedge1);
+        layer.add(wedge13);
+        layer.add(wedge22);
+        layer.add(wedge2);
+        layer.add(wedge23);
+        layer.add(wedge32);
+        layer.add(wedge3);
+        layer.add(wedge33);
+        layer.add(circle);
+        layer.add(simpleText);
+        layer.add(simpleText2);
+        layer.add(simpleText3);
+
+        console.log(layer.getChildren())
+    }
+
+
+    drawWedges();
+
+
+    // add the layer to the stage
+    stage.add(layer);
+</script>
+</body>
+</html>

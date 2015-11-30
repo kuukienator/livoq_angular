@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LivoQ</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <a href="https://plus.google.com/105749563725906013035" rel="publisher" style="display: none;">Google+</a>
+
+
+    <!--
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+
+    -->
+
+    <link rel="stylesheet" href="css/bootstrap_3_custom.min.css">
+    <link rel="stylesheet" href="css/bootstrap_alert.css">
+    <link rel="stylesheet" href="css/bootstrap_dropdown.css">
+    <link rel="stylesheet" href="css/bootstrap_modal.min.css">
+
+    <link rel="stylesheet" href="css/styles.css">
+
+
+    <script src="libs/sha256.js"></script>
+   
+
+</head>
+<body ng-app="livoQApp" ng-csp="">
+    <div class="navbar navbar-default navbar-static-top" role="navigation" ng-hide="showNavBar" ng-Controller="NavBarController" style="display: none" id="navibar">
+        <div class="container">
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href="#/home"><img src="img/logo_livoq_small.png"></a>
+
+            </div>
+
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li ng-class="{active: activeTab == 'home'}"><a href="#/home">Home</a></li>
+                    <li ng-class="{active: activeTab == 'ask'}"><a href="#/ask">Ask</a></li>
+                    <li ng-class="{active: activeTab == 'answer'}"><a href="#/answer">Answer</a></li>
+                    <li ng-class="{active: activeTab == 'myquestions'}"><a href="#/myquestions">My Questions</a></li>
+                    <li ng-class="{active: activeTab == 'settings'}"><a href="#/settings">Settings</a></li>
+                    <li ng-class="{active: activeTab == 'feedback'}"><a href="#/feedback">Feedback</a></li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li  class="navbar-text">Logged in as <b>{{livoqUser}}</b> [{{premiumStatus}}]</li>
+                    <button ng-click="logout()" class="btn btn-default navbar-btn pull-right">Logout</button>
+                    <!--
+                    <button  ng-click="openSettings()" class="btn btn-default navbar-btn pull-right">Settings</button>
+                    -->
+
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div ng-view>
+
+    </div>
+
+
+    <script type="text/ng-template" id="login.html">
+        <div id="logincontainer" >
+            <div class="imagecontainer">
+                <img src="img/logo_livoq.png" alt="some_text" class="logoimage">
+            </div>
+
+            <form ng-submit="login()">
+                Mail: <input  class="inputLivoq" type="email" ng-model="loginmail" required placeholder="test@example.com" autofocus><br>
+                Password: <input  class="inputLivoq" type="password" ng-model="loginpassword" required placeholder="*******"><br>
+                <span ng-show="showactivation">Activation Code: <input  class="inputLivoq" type="text" ng-model="loginactivationcode" ></span><br>
+                <span ng-show="showactivation">No Code yet? <a href="" ng-click="requestNewCode()">Request another.</a></span><br>
+                <div>
+                    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                </div>
+
+                <button class="livoqgreenbutton">Login</button><input type="checkbox" ng-model="loginremember" id="remembermail"><label id="rememberMe" for="remembermail">Remember Me</label>
+
+            </form>
+
+            <div class="formFooter">
+                <table style="width: 400px;text-align: left">
+                    <tr>
+                        <td>Don't have an account yet? </td>
+                        <td><button  class="livoqpurplebuttonFill" ng-click="redirect(1)">Register</button></td>
+                    </tr>
+                    <tr>
+                        <td>Forgot your password?</td>
+                        <td><button  class="livoqpurplebuttonFill" ng-click="redirect(2)">Reset Password</button></td>
+                    </tr>
+                </table>
+
+
+
+
+                <!--
+                <p>Don't have an account yet? <button style="float: right;margin-bottom: 10px" class="livoqpurplebuttonFill" ng-click="redirect(1)">Register</button></p>
+                <p>Forgot your password?<button style="float: right;margin-bottom: 10px"" class="livoqpurplebuttonFill" ng-click="redirect(2)">Reset Password</button></p>
+                -->
+                <!--
+                <a href="https://play.google.com/store/apps/details?id=com.livoq">
+                    <img alt="Get it on Google Play"
+                         src="https://developer.android.com/images/brand/en_generic_rgb_wo_60.png" />
+                </a>
+                -->
+            </div>
+            <div style="text-align: center;margin-top: 20px;">
+                <p>Talk to us:</p>
+                <a href="https://www.facebook.com/livoq" class="livoqFacebookbutton">Facebook</a>
+                <a href="https://twitter.com/livoq_app" class="livoqTwitterbutton">Twitter</a>
+                <a href="https://plus.google.com/105749563725906013035" class="livoqGooglebutton">Google+</a>
+                <a href="http://blog.livoq.com/" class="livoqBlogbutton">DevBlog</a>
+            </div>
+
+        </div>
+
+    </script>
+
+    <script type="text/ng-template" id="passreset.html">
+        <div id="passresetContainer">
+            <div class="imagecontainer">
+                <img src="img/logo_livoq.png" alt="some_text" class="logoimage">
+            </div>
+
+            <form ng-submit="resetPassword()" class="settingsForm">
+                <input  type="email" ng-model="resetmail" placeholder="Enter your email" required autofocus><br>
+                <input type="password" placeholder="Enter new password" ng-model="newPassword" ng-show="showActivationCode">
+                <input type="text" placeholder="Enter password reset code" ng-model="activationCode" ng-show="showActivationCode">
+                <div>
+                    <alert ng-repeat="alert in resetPasswordAlerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                </div>
+                <button class="livoqgreenbutton" >Reset Password</button>
+            </form>
+
+            <p class="formFooter"><button  class="livoqpurplebuttonFill" ng-click="redirect(1)">Login</button></p>
+
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="register.html">
+        <div id="registercontainer">
+            <div class="imagecontainer">
+                <img src="img/logo_livoq.png" alt="some_text" class="logoimage">
+            </div>
+
+            <form ng-submit="register()"  class="settingsForm">
+                Email: <input  type="email" ng-model="registermail" required  placeholder="test@example.com" autofocus><br>
+                Password: <input  type="password" ng-model="registerpassword" required  placeholder="*******"><br>
+                Year of birth: <input  type="number" ng-model="registerbirthyear" required><br>
+                Gender: <select  ng-model="registergender" required>
+                            <option value="m">Male</option>
+                            <option value="w">Female</option>
+                        </select><br>
+
+                Country: <select  ng-model="registercountry" ng-options="c.name for c in countries" required>
+
+                        </select><br>
+                <div>
+                    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                </div>
+                <button class="livoqgreenbutton">Register</button><br>
+            </form>
+
+            <p class="formFooter">Already have an account?<button  class="livoqpurplebuttonFill" ng-click="redirect(1)">Login</button></p>
+            <div style="text-align: center;margin-top: 20px;">
+                <p>Talk to us:</p>
+                <a href="https://www.facebook.com/livoq" class="livoqFacebookbutton">Facebook</a>
+                <a href="https://twitter.com/livoq_app" class="livoqTwitterbutton">Twitter</a>
+                <a href="https://plus.google.com/105749563725906013035" class="livoqGooglebutton">Google+</a>
+                <a href="http://blog.livoq.com/" class="livoqBlogbutton">DevBlog</a>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="ask.html">
+        <div  id="askcontainer">
+            <form ng-submit="ask()" class="askForm">
+                <label>Question: ({{questionLength}} / 150)</label><textarea ng-change="counter()" maxlength="150" ng-model="questionText" required ></textarea><br>
+                <label>Language: </label>
+                <select class="inputLivoq" ng-model="questionLanquage" ng-options="l.name for l in languages" ng-change="languageChanged()" required> </select>
+                <input class="inputLivoqCheckbox" type="checkbox" ng-model="questionThirdAnswerBox" >
+                <label>Allow skipping</label>
+                <br>
+                <label ng-show="questionCustomAnswerBox">Answer 1: ({{answer1Length}} / 25) </label><input ng-change="counterAnswer(1)" maxlength="25" class="inputLivoq" type="text" ng-model="questionAnswerOne" ng-show="questionCustomAnswerBox"><br>
+                <label ng-show="questionCustomAnswerBox">Answer 2: ({{answer2Length}} / 25) </label><input ng-change="counterAnswer(2)"maxlength="25" class="inputLivoq" type="text" ng-model="questionAnswerTwo" ng-show="questionCustomAnswerBox"><br>
+                <label>Vote Limit: {{voteCost}}</label><input  ng-change="voteCounter()" class="inputLivoq" type="number" ng-model="questionVoteLimit" min="10" max="100" required><br>
+
+                <!--
+                <select  class="inputLivoq" class="inputLivoq" ng-model="questionLanquage" required>
+                        <option value="en">English</option>
+                        <option value="de">German</option>
+                    </select><br>
+                -->
+                <span ng-model="askQuestionResponse"></span>
+                <div>
+                    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</alert>
+                </div>
+                <div style="text-align: center">
+                    <button class="livoqgreenbutton">Ask</button>
+                </div>
+
+            </form>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="answer.html">
+        <div id="answercontainer">
+            <div ng-hide="hideLoading">
+                <div class="emptyViewImageContainer">
+                    <img src="img/logo_icon_greyscale.png" alt="some_text">
+                </div>
+                <div class="loading_bar">
+                    <p id="loading_bars_text">Loading...</p>
+                    <div class="purplebar"></div>
+                    <div class="greenbar"></div>
+                    <div class="purplebar"></div>
+                    <div class="greenbar"></div>
+                    <div class="purplebar"></div>
+                    <div class="greenbar"></div>
+                </div>
+            </div>
+
+            <div ng-show="showQuestion">
+                <p id="questionText" class="questionBox"><span class="openingQuote">&bdquo;</span>{{receivedquestion.question}}<span class="closingQuote">&ldquo;</span></p>
+                <button class="livoqgreenbutton" ng-click="answerQuestion(receivedquestion._id,1)">{{button1}}</button>
+                <button class="livoqpurplebutton" ng-click="answerQuestion(receivedquestion._id,2)">{{button2}}</button>
+                <button class="livoqgreybutton" ng-show="receivedquestion.isskipable" ng-click="answerQuestion(receivedquestion._id,3)">Skip</button>
+               <div>
+                   <div class="btn-group">
+                       <button class="btn dropdown-toggle livoqReportButton">
+                           Report
+                           <span class="caret"></span>
+                       </button>
+
+                       <ul class="dropdown-menu">
+                           <li ng-repeat="choice in items"><a href="" ng-click="reportQuestion(receivedquestion._id,$index+1)">{{choice}}</a></li>
+                       </ul>
+                   </div>
+               </div>
+
+           </div>
+
+            <div ng-show="showEmptyView">
+                <div class="emptyViewImageContainer">
+                    <img src="img/logo_icon_greyscale.png" alt="some_text">
+                </div>
+                <p class="questionBox">There are currently no open questions.<br>Reload or come back later.</p>
+                <button class="livoqgreenbutton" ng-click="reloadView()">Reload</button>
+            </div>
+
+            <div ng-show="showAd">
+                <div class="emptyViewImageContainer">
+                    <img src="img/logo_icon_greyscale.png" alt="some_text">
+                </div>
+                <div>
+                    <p>Your next question is Loading.<br>To remove ads get Premium</p>
+                    <button class="livoqpurplebutton">Get Premium</button>
+                </div>
+            </div>
+
+        </div>
+
+    </script>
+
+    <script type="text/ng-template" id="myquestions.html">
+        <div style="text-align:center">
+            <div ng-hide="hideLoading">
+                <div ng-hide="hideLoading">
+                    <div class="emptyViewImageContainer">
+                        <img src="img/logo_icon_greyscale.png" alt="some_text">
+                    </div>
+                    <div class="loading_bar">
+                        <p id="loading_bars_text">Loading...</p>
+                        <div class="purplebar"></div>
+                        <div class="greenbar"></div>
+                        <div class="purplebar"></div>
+                        <div class="greenbar"></div>
+                        <div class="purplebar"></div>
+                        <div class="greenbar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="showDataView" id="myquestionscontainer">
+                <div id="listcontainer">
+                    <ul class="resultlist">
+                        <li ng-class="{itemselected : $index == currentIndex}" ng-repeat="result in results"
+                            ng-click="showDetails($index)">
+                        <span class="listQuestionText">{{result.question}}</span>
+                        <p>
+                            <i class="listQuestionDate">{{result.parsedDate}}</i>
+                            <span ng-show="result.isfinish" class="listQuestionDetails">Finished</span>
+                            <span ng-show="result.isfavorite" class="listQuestionDetails">Favorite</span>
+                        </p>
+                        </li>
+                    </ul>
+                    <button class="livoqgreenbutton" ng-click="loadMore()"  ng-disabled="alreadyLoading">Load more</button>
+                </div>
+
+                <div id="detailcontainer">
+                    <p  class="questionBoxMyQuestions"><span class="openingQuote">&bdquo;</span><span>{{resultdetails.question}}</span><span class="closingQuote">&ldquo;</span><br><i>- {{resultdetails.parsedDate}}</i></p>
+                    <div id="canvascontainer">
+                        <canvas width="300" height="300" class="canvas" id="barCanvas">
+                        </canvas>
+                        <canvas width="300" height="300" class="canvas" id="pieCanvas">
+                        </canvas>
+                    </div>
+
+                    <div>
+                        <ul style="text-align:left;list-style-type: none;padding: 0;">
+                            <li class="color_list_element color_list_element_green">{{answer1}}</li>
+                            <li class="color_list_element color_list_element_purple">{{answer2}}</li>
+                            <li ng-show="showThird" class="color_list_element color_list_element_grey">{{answer3}}</li>
+                        </ul>
+                    </div>
+
+                    <div style="width: 550px; height: 30px;">
+
+                        <div ng-class="animateStripes" class="progress-bar blue stripes" style="float:left;text-align:left">
+                            <span ng-style="progressBarStyle"></span>
+                        </div>
+                        <div style="float:left;margin-left: 10px">
+                            <span style="font-size:1.5em;">{{progressBarPercentage}} % complete</span>
+                        </div>
+
+
+                    </div>
+
+                    <button class="livoqgreenbutton" ng-click="stopQuestion(resultdetails._id,resultdetails.isfinish)" ng-hide="resultdetails.isfinish">Stop Question</button>
+                    <button class="livoqgreenbutton" ng-click="deleteQuestion(resultdetails._id,resultdetails.isfinish)" ng-show="resultdetails.isfinish">Delete Question</button>
+                    <button class="livoqpurplebutton" ng-click="toggleFavorite(resultdetails._id,resultdetails.isfavorite)">Toggle Favorite</button>
+                    <button class="livoqgreybuttonFill" ng-click="showShareDialog(resultdetails._id,resultdetails.publiccode)">Share Link</button>
+
+                </div>
+            </div>
+
+            <div ng-show="showEmptyView" id="myquestionsEmptyView">
+                <div class="emptyViewImageContainer">
+                    <img src="img/logo_icon_greyscale.png" alt="some_text">
+                </div>
+                <p class="questionBox">You have no questions yet.<br> You should try asking something.</p>
+                <button class="livoqgreenbutton" ng-click="redirect(1)">Ask a Question</button>
+                <button class="livoqpurplebutton" ng-click="redirect(2)">Answer a Question</button>
+
+            </div>
+
+        </div>
+
+    </script>
+
+    <script type="text/ng-template" id="settings.html">
+        <div id="settingsContainer" >
+            <p>Current account email: <b>{{currentEmail}}</b></p>
+            <form class="settingsForm">
+                <input type="email" placeholder="Enter new email" required ng-model="newEmail">
+                <input type="text" placeholder="Enter your Activation code" ng-model="activationCode" ng-show="showActivation">
+                <div>
+                    <alert ng-repeat="alert in newMailAlerts" type="alert.type" close="closeAlert($index,1)">{{alert.msg}}</alert>
+                </div>
+                <div style="text-align: center">
+                <button class="livoqgreenbutton" ng-click="changeEmail()">Change email</button>
+                </div>
+            </form>
+            <br>
+            <form class="settingsForm">
+                <input type="password" placeholder="Enter current password" required ng-model="currentPassword">
+                <input type="password" placeholder="Enter new password" required ng-model="newPassword">
+                <div>
+                    <alert ng-repeat="alert in newPasswordAlerts" type="alert.type" close="closeAlert($index,2)">{{alert.msg}}</alert>
+                </div>
+                <div style="text-align: center">
+                <button class="livoqgreenbutton" ng-click="changePassword()">Change password</button>
+                    </div>
+            </form>
+            <br>
+            <form class="settingsForm">
+                <p>Selected Languages:</p>
+                <ul>
+                    <li style="list-style: none;" ng-repeat="language in currentLanguages">{{language.name}}<button ng-click="unselectLanguage($index)" class="livoqsmallgreybutton">Remove</button></li>
+                </ul>
+                <select ng-model="selectedLanguage" ng-options="l.name for l in availableLanguages"  ng-disabled="disableLanguages"></select><br>
+                <div style="text-align: center">
+                <button class="livoqgreenbutton" ng-click="addLanguage()">Add language</button>
+                    </div>
+            </form>
+        </div>
+
+    </script>
+
+    <script type="text/ng-template" id="home.html">
+        <div>
+            <div id="homecontainer">
+
+                <div class="livoqSquarePurple">
+                    <span class="livoqSquareTextTop" >You have </span><br>
+                    <span class="livoqSquareNumbers">{{rawData.currentPoints}}</span><br>
+                    <span class="livoqSquareTextBottom">points</span><br>
+                </div>
+                <div class="livoqSquarePurple">
+                    <span class="livoqSquareTextTop" >You are currently </span><br>
+                    <span class="livoqSquareBigText"><b>{{statistics.premiumStatus}}</b></span><br>
+                    <span class="livoqSquareTextBottom">{{statistics.premiumDetails}}</span><br>
+                </div>
+
+
+                <div class="livoqSquareGreen">
+                    <span class="livoqSquareTextTop" >In total </span><br>
+                    <span class="livoqSquareNumbers">{{rawData.questionsask}}</span><br>
+                    <span class="livoqSquareTextBottom">{{statistics.questionsask}}</span><br>
+                </div>
+                <div class="livoqSquareGreen">
+                    <span class="livoqSquareTextTop" >Today</span><br>
+                    <span class="livoqSquareNumbers">{{rawDataDaily.questionsask}}</span><br>
+                    <span class="livoqSquareTextBottom">{{statistics.questionsask}}</span><br>
+                </div>
+
+                <div class="livoqSquareGrey">
+                    <span class="livoqSquareTextTop" >In total </span><br>
+                    <span class="livoqSquareNumbers">{{rawData.questionsfinished}}</span><br>
+                    <span class="livoqSquareTextBottom">{{statistics.questionsfinished}}</span><br>
+                </div>
+                <div class="livoqSquareGrey">
+                    <span class="livoqSquareTextTop" >Today</span><br>
+                    <span class="livoqSquareNumbers">{{rawDataDaily.questionsfinished}}</span><br>
+                    <span class="livoqSquareTextBottom">{{statistics.questionsfinished}}</span><br>
+                </div>
+
+
+                <div class="livoqSquarePurple">
+                    <span class="livoqSquareTextTop" >Overall</span><br>
+                    <span class="livoqSquareNumbers">{{rawData.votes}}</span><br>
+                    <span class="livoqSquareTextBottom">{{statistics.votes}}</span><br>
+                </div>
+                <div class="livoqSquarePurple">
+                    <span class="livoqSquareTextTop" >Today</span><br>
+                    <span class="livoqSquareNumbers">{{rawDataDaily.votes}}</span><br>
+                    <span class="livoqSquareTextBottom">{{statistics.votes}}</span><br>
+                </div>
+                <!--
+                <div class="livoqSquareGreen">
+                    <span class="livoqSquareTextTop" >Overall</span><br>
+                    <span class="livoqSquareNumbers">{{rawData.votes}}</span><br>
+                    <span class="livoqSquareTextBottom">{{statistics.votes}}</span><br>
+                </div>
+                <div class="livoqSquareGreen">
+                    <span class="livoqSquareTextTop" >Today</span><br>
+                    <span class="livoqSquareNumbers">{{rawDataDaily.votes}}</span><br>
+                    <span class="livoqSquareTextBottom">{{statistics.votes}}</span><br>
+                </div>
+               -->
+
+
+
+
+
+            </div>
+
+
+        </div>
+
+    </script>
+
+    <script type="text/ng-template" id="public.html">
+
+        <div style="text-align: center; margin: 0 auto;width: 700px;margin-top: 50px">
+            <div ng-hide="hideLoadingPublic">
+                <div class="emptyViewImageContainer">
+                    <img src="img/logo_icon_greyscale.png" alt="some_text">
+                </div>
+                <div class="loading_bar">
+                    <p id="loading_bars_text">Loading...</p>
+                    <div class="purplebar"></div>
+                    <div class="greenbar"></div>
+                    <div class="purplebar"></div>
+                    <div class="greenbar"></div>
+                    <div class="purplebar"></div>
+                    <div class="greenbar"></div>
+                </div>
+            </div>
+
+            <div ng-show="showPublicEmpty" id="myquestionsEmptyView">
+                <div class="emptyViewImageContainer">
+                    <img src="img/logo_icon_greyscale.png" alt="some_text">
+                </div>
+                <p class="questionBox">Sorry, no question found.</p>
+                <button class="livoqgreenbutton" ng-click="redirect(1)" >Login</button>
+                <button class="livoqpurplebutton" ng-click="redirect(2)" >Register</button>
+            </div>
+
+            <div ng-show="showPublicView">
+                <p  class="questionBoxMyQuestions"><span class="openingQuote">&bdquo;</span><span>{{resultdetails.question}}</span><span class="closingQuote">&ldquo;</span><br><i>- {{resultdetails.parsedDate}}</i></p>
+                <div id="canvascontainer">
+                    <canvas width="300" height="300" class="canvas" id="barCanvasPublic">
+                    </canvas>
+                    <canvas width="300" height="300" class="canvas" id="pieCanvasPublic">
+                    </canvas>
+                </div>
+
+                <div>
+                    <ul style="text-align:left;list-style-type: none;padding: 0;">
+                        <li class="color_list_element color_list_element_green">{{answer1}}</li>
+                        <li class="color_list_element color_list_element_purple">{{answer2}}</li>
+                        <li ng-show="showThird" class="color_list_element color_list_element_grey">{{answer3}}</li>
+                    </ul>
+                </div>
+
+                <div style="width: 550px; height: 30px;margin-bottom: 50px">
+
+                    <div ng-class="animateStripes" class="progress-bar blue stripes" style="float:left;text-align:left">
+                        <span ng-style="progressBarStyle"></span>
+                    </div>
+                    <div style="float:left;margin-left: 10px">
+                        <span style="font-size:1.5em;">{{progressBarPercentage}} % complete</span>
+                    </div>
+
+
+                </div>
+
+                <button class="livoqgreenbutton" ng-click="redirect(1)" >Login</button>
+                <button class="livoqpurplebutton" ng-click="redirect(2)" >Register</button>
+
+            </div>
+        </div>
+
+    </script>
+
+    <script type="text/ng-template" id="feedback.html">
+
+        <div style="width: 400px; margin: 0 auto; margin-top: 50px">
+            <div style="text-align: center;margin-top: 20px;">
+                <h2 style="color:#5c3566 "><b>Social Media</b></h2>
+                <p style="font-size: 1.3em">Find to us on:</p>
+                <br>
+                <a href="https://www.facebook.com/livoq" class="livoqFacebookbutton">Facebook</a>
+                <a href="https://twitter.com/livoq_app" class="livoqTwitterbutton">Twitter</a>
+                <a href="https://plus.google.com/105749563725906013035" class="livoqGooglebutton">Google+</a>
+                <a href="http://blog.livoq.com/" class="livoqBlogbutton">DevBlog</a>
+
+            </div>
+
+            <div style="text-align: center;margin-top: 50px; border-top: 2px #5c3566 solid;">
+                <h2 style="color:#5c3566;margin-top: 20px "><b>Email Support</b></h2>
+                <p><a  style="font-size: 1.3em;color:#4e9a06" href="mailto:emmanuel@livoq.com">Web and General</a></p>
+                <p><a style="font-size: 1.3em;color:#4e9a06" href="mailto:karl-heinz@livoq.com"">Android and Server</a></p>
+                <p><a style="font-size: 1.3em;color:#4e9a06" href="mailto:markus@livoq.com">iOS</a></p>
+            </div>
+
+
+        </div>
+
+    </script>
+
+    <script type="text/ng-template" id="sharedialog.html">
+
+        <div id="shareDialog">
+            <div>
+                <p id="shareHeader">Share your question</p>
+                <p id="shareDialogLink">{{item.sharelink}}</p>
+            </div>
+
+
+            <div id="shareSocialLinks">
+
+                <a href="http://twitter.com/share?url={{item.encodeLink}}&hashtags=livoq" onclick="javascript:window.open(this.href,
+                '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                    <img src="img/twitter.png" alt="Share on Twitter"/>
+                </a>
+
+                <a href="https://plus.google.com/share?url={{item.encodeLink}}" onclick="javascript:window.open(this.href,
+                '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"><img
+                        src="https://www.gstatic.com/images/icons/gplus-32.png" alt="Share on Google+"/></a>
+
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{item.encodeLink}}"  onclick="javascript:window.open(this.href,
+                '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
+                    <img src="img/facebook_32.png" alt="Share on Facebook"/>
+                </a>
+            </div>
+
+
+        </div>
+
+    </script>
+
+    <script src="libs/jquery-1.10.2.js"></script>
+    <script src="libs/bootstrap_collapse.min.js"></script>
+
+    <script src="libs/angualr-1.2.0.js"></script>
+    <script src="libs/angular-route-1.2.0.js"></script>
+    <script src="libs/angular-animate.js"></script>
+
+
+    <script src="libs/ui-bootstrap-tpls-0.6.0.js"></script>
+
+
+    <!--
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="libs/bootstrap.min.js"></script>
+    -->
+
+
+    <script src="app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/canvas.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+    "name": "Angular LivoQ",
+    "description": "LivoQ in Chrome",
+    "version": "0.1",
+    "manifest_version": 2,
+    "permissions": [
+        "storage"
+    ],
+    "app": {
+        "background": {
+            "scripts": ["background.js"]
+        }
+    }
+}
